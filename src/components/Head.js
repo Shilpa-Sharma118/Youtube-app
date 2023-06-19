@@ -1,17 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleMenu } from "../utils/menuSlice";
+import { YOUTUBE_SEARCH_API } from "../utils/contants";
 
 const Head = () => {
   const [search, setSearch] = useState("");
+  const [suggestionList, setSuggestionList] = useState([]);
+  const [showSuggestion, setShowSuggestion] = useState(true);
   const dispatch = useDispatch();
 
   const handleDisplayMenu = () => {
     dispatch(toggleMenu());
   };
 
+  const fetchSearchList = async () => {
+    const data = await fetch(YOUTUBE_SEARCH_API + search);
+    const json = await data.json();
+    console.log("json data", json[1]);
+    setSuggestionList(json[1]);
+  };
+
+  //debouncing the API call here
+  useEffect(() => {
+    if (showSuggestion) {
+      const timer = setTimeout(() => fetchSearchList(), 200);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [search]);
+
+  const selectSuggestionItem = (item) => {
+    console.log("item looks like", item);
+    setSearch(item);
+    setShowSuggestion(false);
+    setSuggestionList([]);
+  };
+
   const handleSearch = (e) => {
     setSearch(e.target.value);
+    setShowSuggestion(true);
   };
 
   return (
@@ -32,16 +60,38 @@ const Head = () => {
         </a>
       </div>
       <div className="mb-2">
-        <input
-          className="border-2 border-gray-400 rounded-l-full h-10 p-2 w-96"
-          type="text"
-          value={search}
-          onChange={handleSearch}
-        />
-        <button className="bg-slate-100 border-2 border-gray-400 rounded-r-full h-10 mt-3 w-24 font-bold">
-          Search
-        </button>
+        <div>
+          <input
+            className="border-2 border-gray-400 rounded-l-full h-10 p-2 w-96"
+            type="text"
+            value={search}
+            onChange={(e) => handleSearch(e)}
+            onFocus={() => setShowSuggestion(true)}
+            onBlur={() => setShowSuggestion(false)}
+          />
+          <button className="bg-slate-100 border-2 border-gray-400 rounded-r-full h-10 mt-3 w-24 font-bold">
+            Search
+          </button>
+        </div>
+        {showSuggestion && suggestionList && suggestionList.length > 0 && (
+          <div className="absolute bg-white p-2 w-96 shadow-md rounded-md border border-gray-200">
+            <ul>
+              {suggestionList.map((item, idx) => {
+                return (
+                  <li
+                    key={idx}
+                    className="cursor-pointer my-2"
+                    onMouseDown={() => selectSuggestionItem(item)}
+                  >
+                    {item}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
+
       <div>
         <img
           className="h-10"
