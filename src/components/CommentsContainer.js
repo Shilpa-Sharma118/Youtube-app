@@ -136,15 +136,11 @@ const CommentsContainer = () => {
   const CommentsList = ({ comments }) => {
     return comments.map((comment, idx) => {
       return (
-        <div className="bg-slate-100">
-          <SingleComment key={idx} data={comment} />
-          {comment.replies && comment.replies.length > 0 ? (
-            <div className="pl-2 border-l-2  bg-slate-100 ml-5">
-              <CommentsList comments={comment.replies} />
-            </div>
-          ) : (
-            <></>
-          )}
+        <div className="bg-slate-100" key={idx}>
+          <SingleComment data={comment} />
+          <div className="pl-2 border-l-2  bg-slate-100 ml-5">
+            <CommentsList comments={comment.replies} />
+          </div>
         </div>
       );
     });
