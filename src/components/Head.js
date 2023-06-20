@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/menuSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/contants";
+import { cacheResults } from "../utils/searchSlice";
 
 const Head = () => {
   const [search, setSearch] = useState("");
   const [suggestionList, setSuggestionList] = useState([]);
   const [showSuggestion, setShowSuggestion] = useState(true);
   const dispatch = useDispatch();
+  const searchCache = useSelector((store) => store.search);
 
   const handleDisplayMenu = () => {
     dispatch(toggleMenu());
@@ -16,25 +18,32 @@ const Head = () => {
   const fetchSearchList = async () => {
     const data = await fetch(YOUTUBE_SEARCH_API + search);
     const json = await data.json();
-    console.log("json data", json[1]);
+    //console.log("json data", json[1]);
     setSuggestionList(json[1]);
+    dispatch(
+      cacheResults({
+        [search]: json[1],
+      })
+    );
   };
 
   //debouncing the API call here
   useEffect(() => {
     if (showSuggestion) {
-      const timer = setTimeout(() => fetchSearchList(), 200);
-      return () => {
-        clearTimeout(timer);
-      };
+      if (searchCache[search]) {
+        setSuggestionList(searchCache[search]);
+      } else {
+        const timer = setTimeout(() => fetchSearchList(), 200);
+        return () => {
+          clearTimeout(timer);
+        };
+      }
     }
   }, [search]);
 
   const selectSuggestionItem = (item) => {
-    console.log("item looks like", item);
     setSearch(item);
     setShowSuggestion(false);
-    setSuggestionList([]);
   };
 
   const handleSearch = (e) => {

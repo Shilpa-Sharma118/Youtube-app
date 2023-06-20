@@ -17,7 +17,7 @@ const VideoContainer = () => {
   }, []);
 
   return (
-    <div className="flex flex-wrap p-10">
+    <div className="flex flex-wrap p-5">
       {videos && videos.length > 0 ? (
         videos.map((video) => {
           return (

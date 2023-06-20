@@ -16,14 +16,10 @@ const ButtonsList = () => {
     "Romance",
     "Bollywood",
     "Computer",
-    "Recently",
-    "Watched",
-    "Playlist",
-    "New",
   ];
   return (
     <div>
-      <div className="overflow-x-scroll overflow-y-hidden snap-mandatory snap-x">
+      <div className="mt-3">
         {list.map((name, idx) => (
           <Button key={idx} name={name} />
         ))}
