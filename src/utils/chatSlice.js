@@ -13,7 +13,9 @@ const chatSlice = createSlice({
 
       //Removing extra elements if the number goes above 10
       state.messages.splice(OFFSET_LIVE_CHAT, 1);
-      state.messages.unshift(action.payload);
+      //if you want to add ad front
+      //state.messages.unshift(action.payload)
+      state.messages.push(action.payload);
     },
   },
 });

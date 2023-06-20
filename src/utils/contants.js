@@ -12,4 +12,4 @@ export const YOUTUBE_SEARCH_VIDEO =
 
 export const KEY_PARAM = "&key=" + YOUR_API_KEY;
 
-export const OFFSET_LIVE_CHAT = 10;
+export const OFFSET_LIVE_CHAT = 20;
