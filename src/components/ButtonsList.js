@@ -16,14 +16,30 @@ const ButtonsList = () => {
     "Romance",
     "Bollywood",
     "Computer",
+    "Cooking",
+    "Song",
+    "Dance",
+    "Comedy",
+    "Romance",
+    "Bollywood",
+    "Computer",
   ];
+
+  const showMoreRightItems = () => {};
+
+  const showMoreLeftItems = () => {};
+
   return (
-    <div>
-      <div className="mt-3">
+    <div className="flex items-center mt-3 p-1">
+      <button onClick={() => showMoreLeftItems()}>◀︎</button>
+      <div className="w-[85rem] h-14 flex overflow-x-hidden">
         {list.map((name, idx) => (
           <Button key={idx} name={name} />
         ))}
       </div>
+      <button className="p-1" onClick={() => showMoreRightItems()}>
+        ►
+      </button>
     </div>
   );
 };

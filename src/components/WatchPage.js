@@ -9,6 +9,10 @@ const WatchPage = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
+  //useParams for fetching the ids from the links.
+  //Example of search Param looks like : https://www.youtube.com/watch?v=UXvU81UtwTc.
+  // Here v=... is the search Param
+  // so now you will have to useSearchParams() hook
   console.log(searchParams.get("v"));
 
   useEffect(() => {
